@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Movie behavior analytics and event indexing",
+  "description": "Flow from behavioral analytics to a Rust event and semantic-indexing service.",
+  "diagrams": [
+    {
+      "id": "movie_system",
+      "title": "System overview",
+      "kind": "flowchart",
+      "data": {
+        "direction": "LR",
+        "nodes": [
+          { "id": "behavior", "label": "Movie and comment data" },
+          { "id": "databricks", "label": "Databricks churn notebook" },
+          { "id": "insights", "label": "Engagement and churn insights" },
+          { "id": "csv", "label": "Movie and user CSVs" },
+          { "id": "loader", "label": "Rust CSV loader" },
+          { "id": "postgres", "label": "PostgreSQL" },
+          { "id": "producer", "label": "Rust event producer" },
+          { "id": "iggy", "label": "Apache Iggy - movies / movie-events" },
+          { "id": "consumer", "label": "Rust consumer + FastEmbed" },
+          { "id": "milvus", "label": "Milvus vector index" },
+          { "id": "future", "label": "Planned: recommendation policy and LLM explanations" }
+        ],
+        "edges": [
+          { "from": "behavior", "to": "databricks", "label": "comments and viewing context" },
+          { "from": "databricks", "to": "insights", "label": "90-day churn score" },
+          { "from": "csv", "to": "loader", "label": "ingest" },
+          { "from": "loader", "to": "postgres", "label": "upsert" },
+          { "from": "producer", "to": "iggy", "label": "movie event" },
+          { "from": "iggy", "to": "consumer", "label": "poll and commit offset" },
+          { "from": "consumer", "to": "milvus", "label": "embedding upsert" },
+          { "from": "insights", "to": "future", "label": "activation input" },
+          { "from": "milvus", "to": "future", "label": "retrieval context" }
+        ]
+      }
+    }
+  ]
+}

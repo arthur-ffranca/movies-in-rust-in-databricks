@@ -1,0 +1,31 @@
+# Movie behavior analytics and event indexing
+
+Flow from behavioral analytics to a Rust event and semantic-indexing service.
+
+## System overview
+
+<!-- mermaid:id=movie_system -->
+```mermaid
+flowchart LR
+  behavior["Movie and comment data"]
+  databricks["Databricks churn notebook"]
+  insights["Engagement and churn insights"]
+  csv["Movie and user CSVs"]
+  loader["Rust CSV loader"]
+  postgres["PostgreSQL"]
+  producer["Rust event producer"]
+  iggy["Apache Iggy - movies / movie-events"]
+  consumer["Rust consumer + FastEmbed"]
+  milvus["Milvus vector index"]
+  future["Planned&#58; recommendation policy and LLM explanations"]
+  behavior -->|comments and viewing context| databricks
+  databricks -->|90-day churn score| insights
+  csv -->|ingest| loader
+  loader -->|upsert| postgres
+  producer -->|movie event| iggy
+  iggy -->|poll and commit offset| consumer
+  consumer -->|embedding upsert| milvus
+  insights -->|activation input| future
+  milvus -->|retrieval context| future
+%% portable-canonical-v2:eyJhY2Nlc3NpYmlsaXR5IjpudWxsLCJkYXRhIjp7ImRpcmVjdGlvbiI6IkxSIiwiZWRnZXMiOlt7ImZyb20iOiJiZWhhdmlvciIsImxhYmVsIjoiY29tbWVudHMgYW5kIHZpZXdpbmcgY29udGV4dCIsInRvIjoiZGF0YWJyaWNrcyJ9LHsiZnJvbSI6ImRhdGFicmlja3MiLCJsYWJlbCI6IjkwLWRheSBjaHVybiBzY29yZSIsInRvIjoiaW5zaWdodHMifSx7ImZyb20iOiJjc3YiLCJsYWJlbCI6ImluZ2VzdCIsInRvIjoibG9hZGVyIn0seyJmcm9tIjoibG9hZGVyIiwibGFiZWwiOiJ1cHNlcnQiLCJ0byI6InBvc3RncmVzIn0seyJmcm9tIjoicHJvZHVjZXIiLCJsYWJlbCI6Im1vdmllIGV2ZW50IiwidG8iOiJpZ2d5In0seyJmcm9tIjoiaWdneSIsImxhYmVsIjoicG9sbCBhbmQgY29tbWl0IG9mZnNldCIsInRvIjoiY29uc3VtZXIifSx7ImZyb20iOiJjb25zdW1lciIsImxhYmVsIjoiZW1iZWRkaW5nIHVwc2VydCIsInRvIjoibWlsdnVzIn0seyJmcm9tIjoiaW5zaWdodHMiLCJsYWJlbCI6ImFjdGl2YXRpb24gaW5wdXQiLCJ0byI6ImZ1dHVyZSJ9LHsiZnJvbSI6Im1pbHZ1cyIsImxhYmVsIjoicmV0cmlldmFsIGNvbnRleHQiLCJ0byI6ImZ1dHVyZSJ9XSwibm9kZXMiOlt7ImlkIjoiYmVoYXZpb3IiLCJsYWJlbCI6Ik1vdmllIGFuZCBjb21tZW50IGRhdGEifSx7ImlkIjoiZGF0YWJyaWNrcyIsImxhYmVsIjoiRGF0YWJyaWNrcyBjaHVybiBub3RlYm9vayJ9LHsiaWQiOiJpbnNpZ2h0cyIsImxhYmVsIjoiRW5nYWdlbWVudCBhbmQgY2h1cm4gaW5zaWdodHMifSx7ImlkIjoiY3N2IiwibGFiZWwiOiJNb3ZpZSBhbmQgdXNlciBDU1ZzIn0seyJpZCI6ImxvYWRlciIsImxhYmVsIjoiUnVzdCBDU1YgbG9hZGVyIn0seyJpZCI6InBvc3RncmVzIiwibGFiZWwiOiJQb3N0Z3JlU1FMIn0seyJpZCI6InByb2R1Y2VyIiwibGFiZWwiOiJSdXN0IGV2ZW50IHByb2R1Y2VyIn0seyJpZCI6ImlnZ3kiLCJsYWJlbCI6IkFwYWNoZSBJZ2d5IC0gbW92aWVzIC8gbW92aWUtZXZlbnRzIn0seyJpZCI6ImNvbnN1bWVyIiwibGFiZWwiOiJSdXN0IGNvbnN1bWVyICsgRmFzdEVtYmVkIn0seyJpZCI6Im1pbHZ1cyIsImxhYmVsIjoiTWlsdnVzIHZlY3RvciBpbmRleCJ9LHsiaWQiOiJmdXR1cmUiLCJsYWJlbCI6IlBsYW5uZWQ6IHJlY29tbWVuZGF0aW9uIHBvbGljeSBhbmQgTExNIGV4cGxhbmF0aW9ucyJ9XX0sImRlc2NyaXB0aW9uIjpudWxsLCJpZCI6Im1vdmllX3N5c3RlbSIsImtpbmQiOiJmbG93Y2hhcnQiLCJzb3VyY2VTaGEyNTYiOiI4NDdjNWYwNDU1NTJhM2I1NzRhMjc5Mjc5ZGE5YTVlZDM1NGE5NWU2NjA5YTAyZjkyMGQwZDY5ZDY5ODkzOWZkIiwic3R5bGVzIjpbXSwidGl0bGUiOiJTeXN0ZW0gb3ZlcnZpZXciLCJ2ZXJzaW9uIjoxfQ
+```

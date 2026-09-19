@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1180" viewBox="0 0 960 1180">
+<rect width="100%" height="100%" fill="#0b1020"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif} .title{font-size:22px;font-weight:700;fill:#f4f7ff}.meta{font-size:12px;fill:#9fb0d0}.node{fill:#18233d;stroke:#71d7ff;stroke-width:1.5}.label{font-size:14px;fill:#f7fbff}.edge{stroke:#b984ff;stroke-width:2;fill:none}.edgeLabel{font-size:11px;fill:#dbc8ff}</style>
+<text class="title" x="32" y="36">Movie behavior analytics and event indexing</text>
+<rect x="24" y="62" width="912" height="1106" rx="18" fill="#10182b" stroke="#253556"/>
+<text class="title" x="48" y="96">System overview</text>
+<text class="meta" x="48" y="116">flowchart · structural preview · static evidence</text>
+<rect class="node" x="64" y="140" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="169">Movie and comment data</text>
+<rect class="node" x="516" y="140" width="380" height="48" rx="10"/>
+<text class="label" x="532" y="169">Databricks churn notebook</text>
+<rect class="node" x="64" y="216" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="245">Engagement and churn insights</text>
+<rect class="node" x="516" y="216" width="380" height="48" rx="10"/>
+<text class="label" x="532" y="245">Movie and user CSVs</text>
+<rect class="node" x="64" y="292" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="321">Rust CSV loader</text>
+<rect class="node" x="516" y="292" width="380" height="48" rx="10"/>
+<text class="label" x="532" y="321">PostgreSQL</text>
+<rect class="node" x="64" y="368" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="397">Rust event producer</text>
+<rect class="node" x="516" y="368" width="380" height="48" rx="10"/>
+<text class="label" x="532" y="397">Apache Iggy - movies / movie-events</text>
+<rect class="node" x="64" y="444" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="473">Rust consumer + FastEmbed</text>
+<rect class="node" x="516" y="444" width="380" height="48" rx="10"/>
+<text class="label" x="532" y="473">Milvus vector index</text>
+<rect class="node" x="64" y="520" width="380" height="48" rx="10"/>
+<text class="label" x="80" y="549">Planned: recommendation policy and LLM explanations</text>
+<path class="edge" d="M254,188 L254,604 L706,604 L706,140"/>
+<text class="edgeLabel" x="48" y="618">comments and viewing context</text>
+<path class="edge" d="M706,188 L706,626 L254,626 L254,216"/>
+<text class="edgeLabel" x="48" y="640">90-day churn score</text>
+<path class="edge" d="M706,264 L706,648 L254,648 L254,292"/>
+<text class="edgeLabel" x="48" y="662">ingest</text>
+<path class="edge" d="M254,340 L254,670 L706,670 L706,292"/>
+<text class="edgeLabel" x="48" y="684">upsert</text>
+<path class="edge" d="M254,416 L254,692 L706,692 L706,368"/>
+<text class="edgeLabel" x="48" y="706">movie event</text>
+<path class="edge" d="M706,416 L706,714 L254,714 L254,444"/>
+<text class="edgeLabel" x="48" y="728">poll and commit offset</text>
+<path class="edge" d="M254,492 L254,736 L706,736 L706,444"/>
+<text class="edgeLabel" x="48" y="750">embedding upsert</text>
+<path class="edge" d="M254,264 L254,758 L254,758 L254,520"/>
+<text class="edgeLabel" x="48" y="772">activation input</text>
+<path class="edge" d="M706,492 L706,780 L254,780 L254,520"/>
+<text class="edgeLabel" x="48" y="794">retrieval context</text>
+</svg>
